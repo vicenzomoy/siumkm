@@ -1,0 +1,58 @@
+.bento-card {
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.icon-box {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    font-size: 24px;
+}
+
+.bg-income {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.bg-expense {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.bg-balance {
+    background-color: #e0cffc;
+    color: #512da8;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #ffffff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.btn {
+    border-radius: 12px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 0.5rem;
+    border-bottom-color: #f1f5f9;
+}
