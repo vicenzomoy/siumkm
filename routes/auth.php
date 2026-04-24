@@ -19,12 +19,10 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     // Register Admin (URL rahasia — hanya yang tahu bisa akses)
-    // Ganti 'daftar-admin-xyz123' dengan string acak milikmu
     Route::get('ckZpPzw5yEigdFDJWwS33utDGV808wj0', [AdminRegisterController::class, 'create'])->name('register.admin');
     Route::post('ckZpPzw5yEigdFDJWwS33utDGV808wj0', [AdminRegisterController::class, 'store']);
 
     // Register Super Admin (URL rahasia + wajib isi secret key)
-    // Ganti 'daftar-superadmin-abc999' dengan string acak milikmu
     Route::get('AG010LBHUizGghLA6QVqKm82laIlsmmR', [SuperAdminRegisterController::class, 'create'])->name('register.superadmin');
     Route::post('AG010LBHUizGghLA6QVqKm82laIlsmmR', [SuperAdminRegisterController::class, 'store']);
 
