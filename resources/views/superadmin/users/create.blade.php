@@ -1,114 +1,81 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <i class="fas fa-user-plus me-2"></i>{{ __('Registrasi Akun Baru') }}
+        </h2>
+    </x-slot>
 
-<head>
-    <meta charset="utf-8">
-    <title>Buat Akun Baru</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f3f4f6;
-            margin: 0;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 420px;
-        }
+    <div class="py-12">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+                        <div class="text-center mb-4">
+                            <h4 class="fw-bold">Buat Akses Pengguna</h4>
+                            <p class="text-muted small">Tentukan hak akses dan identitas pengguna baru</p>
+                        </div>
 
-        h2 {
-            margin: 0 0 1.5rem;
-        }
+                        @if ($errors->any())
+                            <div class="alert alert-danger small rounded-3 border-0">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
-        label {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-            color: #374151;
-        }
+                        <form method="POST" action="{{ route('superadmin.users.store') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Nama Lengkap</label>
+                                <input type="text" name="name" class="form-control rounded-3"
+                                    value="{{ old('name') }}" placeholder="Contoh: Admin" required>
+                            </div>
 
-        input,
-        select {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            margin-bottom: 1rem;
-        }
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">Alamat Email</label>
+                                <input type="email" name="email" class="form-control rounded-3"
+                                    value="{{ old('email') }}" placeholder="email@contoh.com" required>
+                            </div>
 
-        button {
-            width: 100%;
-            padding: 0.6rem;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold small">Password</label>
+                                    <input type="password" name="password" class="form-control rounded-3" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold small">Konfirmasi Password</label>
+                                    <input type="password" name="password_confirmation" class="form-control rounded-3"
+                                        required>
+                                </div>
+                            </div>
 
-        .error {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-primary">Pilih Role / Hak Akses</label>
+                                <select name="role" class="form-select rounded-3 border-primary-subtle">
+                                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User (Pemilik
+                                        UMKM)</option>
+                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin (Staff)
+                                    </option>
+                                </select>
+                            </div>
 
-        a {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-    </style>
-</head>
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow">
+                                <i class="fas fa-check-circle me-2"></i>Daftarkan Akun
+                            </button>
+                        </form>
 
-<body>
-    <div class="card">
-        <h2>Buat Akun User / Admin</h2>
-
-        @if ($errors->any())
-            <div class="error">
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
+                        <div class="text-center mt-4">
+                            <a href="{{ route('superadmin.users.index') }}"
+                                class="text-muted small text-decoration-none">← Kembali ke Daftar</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        @endif
-
-        <form method="POST" action="{{ route('superadmin.users.store') }}">
-            @csrf
-
-            <label>Nama</label>
-            <input type="text" name="name" value="{{ old('name') }}" required>
-
-            <label>Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" required>
-
-            <label>Password</label>
-            <input type="password" name="password" required>
-
-            <label>Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" required>
-
-            <label>Role</label>
-            <select name="role">
-                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
-                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-            </select>
-
-            <button type="submit">Buat Akun</button>
-        </form>
-
-        <br>
-        <a href="{{ route('superadmin.users.index') }}">← Kembali ke daftar user</a>
+        </div>
     </div>
-</body>
-
-</html>
+</x-app-layout>

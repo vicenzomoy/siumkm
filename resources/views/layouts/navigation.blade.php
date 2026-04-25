@@ -12,7 +12,16 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('user.dashboard')">
+                    @php
+                        // Menentukan route berdasarkan role
+                        $dashboardRoute = 'user.dashboard';
+                        if (Auth::user()->role === 'admin') {
+                            $dashboardRoute = 'admin.dashboard';
+                        } elseif (Auth::user()->role === 'superadmin') {
+                            $dashboardRoute = 'superadmin.dashboard';
+                        }
+                    @endphp
+                    <x-nav-link :href="route($dashboardRoute)" :active="request()->routeIs($dashboardRoute)">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>

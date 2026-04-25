@@ -1,122 +1,93 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <i class="fas fa-users-manage me-2"></i>{{ __('Manajemen Master Akun') }}
+        </h2>
+    </x-slot>
 
-<head>
-    <meta charset="utf-8">
-    <title>Manajemen User</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 2rem;
-            background: #f3f4f6;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 800px;
-            margin: auto;
-        }
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
+            @if (session('success'))
+                <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4" role="alert">
+                    <i class="fas fa-check-double me-2"></i>{{ session('success') }}
+                </div>
+            @endif
 
-        th,
-        td {
-            padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            text-align: left;
-        }
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Database Pengguna Sistem</h5>
+                    <a href="{{ route('superadmin.users.create') }}" class="btn btn-dark btn-sm rounded-pill px-3">
+                        <i class="fas fa-plus-circle me-1"></i>Buat Akun Baru
+                    </a>
+                </div>
 
-        th {
-            background: #f9fafb;
-        }
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4 border-0 small text-muted">IDENTITAS</th>
+                                <th class="border-0 small text-muted">EMAIL</th>
+                                <th class="border-0 small text-muted">HAK AKSES</th>
+                                <th class="pe-4 border-0 text-center small text-muted">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center me-3"
+                                                style="width: 38px; height: 38px;">
+                                                <i
+                                                    class="fas {{ $user->role === 'admin' ? 'fa-user-tie' : 'fa-store' }} small"></i>
+                                            </div>
+                                            <div>
+                                                <a href="{{ route('superadmin.users.show', $user) }}"
+                                                    class="fw-bold text-dark text-decoration-none d-block">{{ $user->name }}</a>
+                                                <small class="text-muted">Bergabung:
+                                                    {{ $user->created_at->format('d/m/y') }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>
+                                        <span
+                                            class="badge rounded-pill {{ $user->role === 'admin' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-primary-subtle text-primary border border-primary-subtle' }} px-3">
+                                            {{ strtoupper($user->role) }}
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 text-center">
+                                        <div class="btn-group shadow-sm rounded-pill bg-white border p-1">
+                                            <a href="{{ route('superadmin.users.edit', $user) }}"
+                                                class="btn btn-sm btn-white text-warning border-0" title="Edit Akun">
+                                                <i class="fas fa-user-edit"></i>
+                                            </a>
 
-        .badge-user {
-            background: #dbeafe;
-            color: #1d4ed8;
-            padding: 2px 10px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-        }
-
-        .badge-admin {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 2px 10px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-        }
-
-        a.btn {
-            background: #ef4444;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-
-        .success {
-            color: green;
-            margin-bottom: 1rem;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="card">
-        <h2>Manajemen User & Admin</h2>
-
-        @if (session('success'))
-            <p class="success">{{ session('success') }}</p>
-        @endif
-
-        <a class="btn" href="{{ route('superadmin.users.create') }}">+ Buat Akun Baru</a>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            <span class="badge-{{ $user->role }}">{{ $user->role }}</span>
-                        </td>
-                        <td>
-                            <form method="POST" action="{{ route('superadmin.users.destroy', $user) }}"
-                                onsubmit="return confirm('Hapus akun ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="color:red; border:none; background:none; cursor:pointer;">
-                                    Hapus
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        {{ $users->links() }}
-
-        <br>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit">Logout</button>
-        </form>
+                                            <form action="{{ route('superadmin.users.destroy', $user) }}"
+                                                method="POST" class="d-inline"
+                                                onsubmit="return confirm('Hapus permanen akun ini?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-white text-danger border-0"
+                                                    title="Hapus Akun">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-4">
+                {{ $users->links() }}
+            </div>
+        </div>
     </div>
-</body>
-
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</x-app-layout>

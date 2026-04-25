@@ -17,7 +17,7 @@ class TransactionSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         // Ganti dengan email kamu yang ada di database
-        $user = User::where('email', 'vicenzo@gmail.com')->first();
+        $user = User::where('email', 'user@example.com')->first();
 
         if (!$user) {
             $this->command->error('Gagal melakukan seeding: User tidak ditemukan!');

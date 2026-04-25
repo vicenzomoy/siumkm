@@ -5,6 +5,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UserManagementController;
+use App\Http\Controllers\Admin\UserManagementController as AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,8 +30,14 @@ Route::middleware(['auth', 'role:user', 'prevent-back-history'])->group(function
 });
 
 // Route untuk Admin
-Route::middleware(['auth', 'role:admin', 'prevent-back-history'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    // Manajemen User oleh Admin
+    Route::resource('users', AdminUserController::class);
 });
 
 // Route untuk Super Admin + CRUD user management
