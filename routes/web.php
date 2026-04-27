@@ -45,11 +45,4 @@ Route::middleware(['auth', 'role:superadmin', 'prevent-back-history'])->prefix('
     Route::resource('users', UserManagementController::class); // CRUD lengkap
 });
 
-// Route yang bisa diakses Admin DAN Super Admin
-Route::middleware(['auth', 'role:admin,superadmin', 'prevent-back-history'])->group(function () {
-    Route::get('/laporan', function () {
-        return view('laporan');
-    })->name('laporan');
-});
-
 require __DIR__ . '/auth.php';
