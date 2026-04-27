@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UserManagementController;
 use App\Http\Controllers\Admin\UserManagementController as AdminUserController;
