@@ -29,7 +29,7 @@ Route::middleware(['auth', 'role:user', 'prevent-back-history'])->group(function
 });
 
 // Route untuk Admin
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin', 'prevent-back-history'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
