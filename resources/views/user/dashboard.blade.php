@@ -152,24 +152,59 @@
                             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                                 <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-primary"></i>Riwayat
                                     Transaksi</h5>
-                                <form action="{{ route('user.dashboard') }}" method="GET"
-                                    class="d-flex align-items-center bg-light p-2 rounded-4">
-                                    <input type="date" class="form-control form-control-sm me-2 border-0 bg-white"
-                                        name="mulai" value="{{ request('mulai') }}" max="{{ date('Y-m-d') }}"
-                                        required />
-                                    <span class="text-muted small px-1">-</span>
-                                    <input type="date"
-                                        class="form-control form-control-sm ms-2 me-2 border-0 bg-white"
-                                        name="selesai" value="{{ request('selesai') }}" max="{{ date('Y-m-d') }}"
-                                        required />
-                                    <button type="submit" class="btn btn-sm btn-primary rounded-circle"
-                                        style="width:32px; height:32px; padding:6px;"><i
-                                            class="fas fa-filter"></i></button>
-                                    <a href="{{ route('user.dashboard') }}"
-                                        class="btn btn-sm btn-light rounded-circle ms-2 text-danger"
-                                        style="width:32px; height:32px; padding:6px;" title="Reset"><i
-                                            class="fas fa-sync-alt"></i></a>
-                                </form>
+
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                                    <div x-data="{ open: false }" class="position-relative">
+                                        <button @click="open = !open" @click.outside="open = false" type="button"
+                                            class="btn btn-sm btn-success rounded-pill px-3 shadow-sm d-flex align-items-center">
+                                            <i class="fas fa-download me-2"></i> Export Laporan <i
+                                                class="fas fa-chevron-down ms-2" style="font-size: 0.7em;"></i>
+                                        </button>
+
+                                        <ul x-show="open" x-transition.opacity.duration.200ms
+                                            style="display: none; min-width: 170px; z-index: 1050;"
+                                            class="dropdown-menu show position-absolute end-0 mt-2 border-0 shadow-lg rounded-3">
+                                            <li>
+                                                <a class="dropdown-item py-2 d-flex align-items-center"
+                                                    href="{{ route('transactions.export.excel', request()->all()) }}">
+                                                    <i class="fas fa-file-excel text-success me-2"
+                                                        style="width: 20px;"></i> Export ke Excel
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider opacity-10 my-1">
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item py-2 d-flex align-items-center"
+                                                    href="{{ route('transactions.export.pdf', request()->all()) }}">
+                                                    <i class="fas fa-file-pdf text-danger me-2"
+                                                        style="width: 20px;"></i> Export ke PDF
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <form action="{{ route('user.dashboard') }}" method="GET"
+                                        class="d-flex align-items-center bg-light p-2 rounded-4">
+                                        <input type="date"
+                                            class="form-control form-control-sm me-2 border-0 bg-white" name="mulai"
+                                            value="{{ request('mulai') }}" max="{{ date('Y-m-d') }}" required />
+                                        <span class="text-muted small px-1">-</span>
+                                        <input type="date"
+                                            class="form-control form-control-sm ms-2 me-2 border-0 bg-white"
+                                            name="selesai" value="{{ request('selesai') }}"
+                                            max="{{ date('Y-m-d') }}" required />
+                                        <button type="submit" class="btn btn-sm btn-primary rounded-circle"
+                                            style="width:32px; height:32px; padding:6px;"><i
+                                                class="fas fa-filter"></i></button>
+                                        <a href="{{ route('user.dashboard') }}"
+                                            class="btn btn-sm btn-light rounded-circle ms-2 text-danger"
+                                            style="width:32px; height:32px; padding:6px;" title="Reset"><i
+                                                class="fas fa-sync-alt"></i></a>
+                                    </form>
+
+                                </div>
                             </div>
 
                             <div class="table-responsive">

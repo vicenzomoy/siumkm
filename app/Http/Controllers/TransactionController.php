@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\TransactionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
@@ -101,5 +104,37 @@ class TransactionController extends Controller
 
         $transaction->delete();
         return redirect()->route('user.dashboard')->with('success', 'Transaksi berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        // Gunakan query dasar milik user yang sedang login
+        $query = auth()->user()->transactions();
+
+        // Jika user menerapkan filter tanggal, terapkan juga pada data export
+        if ($request->filled('mulai') && $request->filled('selesai')) {
+            $query->whereBetween('tanggal', [$request->mulai, $request->selesai]);
+        }
+
+        $transactions = $query->orderBy('tanggal', 'desc')->get();
+
+        // Load view PDF dan set ukuran kertas (A4 Potrait)
+        $pdf = Pdf::loadView('exports.transactions_pdf', compact('transactions'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('Laporan_Keuangan_UMKM.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $query = auth()->user()->transactions();
+
+        if ($request->filled('mulai') && $request->filled('selesai')) {
+            $query->whereBetween('tanggal', [$request->mulai, $request->selesai]);
+        }
+
+        $transactions = $query->orderBy('tanggal', 'desc')->get();
+
+        return Excel::download(new TransactionsExport($transactions), 'Laporan_Keuangan_UMKM.xlsx');
     }
 }
